@@ -23,7 +23,10 @@
     "typescript": "^3.3.3333"
   },
   "nodemonConfig": {
-    "watch": "./src",
+    "watch": [
+      "./src",
+      "./dev"
+    ],
     "exec": "ts-node ./dev/app"
   }
 }
