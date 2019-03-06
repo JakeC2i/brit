@@ -27,6 +27,7 @@
       "./src",
       "./dev"
     ],
+    "ext": "ts",
     "exec": "ts-node ./dev/app"
   }
 }
