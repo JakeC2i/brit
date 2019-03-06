@@ -1,1 +1,1 @@
-console.log('Hello world!');
+export {Injector} from './injector/injector';
