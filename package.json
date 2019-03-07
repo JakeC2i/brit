@@ -29,5 +29,8 @@
     ],
     "ext": "ts",
     "exec": "ts-node ./dev/app"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
   }
 }
