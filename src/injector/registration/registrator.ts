@@ -1,4 +1,3 @@
-import {Class} from "../class";
 import {Registration} from "./registration";
 
 
