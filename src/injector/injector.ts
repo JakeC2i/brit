@@ -1,16 +1,13 @@
+import {getRegistrator} from "./registration/registrator";
+
 export class Injector {
 
-  /**
-   * Singleton pattern
-   */
 
-  private static _instance: Injector;
-  private constructor() {}
-  public static getInstance(): Injector {
-    if (!Injector._instance) {
-      Injector._instance = new Injector();
-    }
-    return Injector._instance;
-  }
+  private _registrator = getRegistrator();
+
+
+  constructor(
+    public readonly namespace: string
+  ) {}
 
 }
