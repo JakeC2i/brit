@@ -1,6 +1,7 @@
 import {Class} from "../type/classes";
 import {getRegistrator} from "../registration/registrator";
 import {ClassRegistration} from "../registration/class";
+import {getInstanceReadinessProxy} from "../instantiation/instance-readiness-proxy";
 
 export function Injectable(options?: ClassRegistration.Options) {
 
@@ -13,5 +14,14 @@ export function Injectable(options?: ClassRegistration.Options) {
           )
         );
     }
+
+}
+
+export namespace Injectable {
+
+  export function markReady(klass: Class) {
+    getInstanceReadinessProxy()
+      .markReady(klass);
+  }
 
 }

@@ -1,4 +1,5 @@
 import {getRegistrator, Registrator} from "../registration/registrator";
+import {getInstanceReadinessProxy} from "./instance-readiness-proxy";
 import {Class} from "../type/classes";
 import {ProviderClassRegistration} from "../registration/provider-class";
 import {ClassRegistration} from "../registration/class";
@@ -6,7 +7,9 @@ import {ColdPromise} from "../../async/cold-promise";
 
 export class Instantiator<T> {
 
+
   private readonly _registrator = getRegistrator();
+  private readonly _readinessProxy = getInstanceReadinessProxy();
   private readonly _order: Registrator.ClassName[] = [];
   private readonly _instanceMap: Instantiator.ClassNameToInstanceMap;
 
@@ -57,7 +60,20 @@ export class Instantiator<T> {
       }
 
       if (registration.options && registration.options.async) {
-        throw new Error('Asynchronous injection not implemented!');
+        return new ColdPromise(((resolve, reject) => {
+          instantiate(className)
+            .fire()
+            .then(instance => {
+              this._readinessProxy.subscribe((readyClassName) => {
+                if (readyClassName === className) {
+                  resolve(instance);
+                }
+              });
+            })
+            .catch(error => {
+              reject(error);
+            });
+        }));
       }
 
       return instantiate(className);
@@ -68,10 +84,12 @@ export class Instantiator<T> {
         .fire()
         .then(() => {
           resolve(this._instanceMap.get(this._root.name));
+          this._readinessProxy.unsubscribe();
         })
         .catch(reject);
     });
   }
+
 
   constructor(
     private _root: Class<T>
