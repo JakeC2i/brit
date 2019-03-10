@@ -8,7 +8,7 @@ export class Reflector {
     const argTypeConstructors: any[] = Reflect.getMetadata('design:paramtypes', constructor);
     let argumentClassNames: any[] = [];
     if (!argTypeConstructors) {
-      throw new Error(`Could not reflect "${constructor.name}" constructor arguments`);
+      return [];
     }
     return argTypeConstructors.map((argumentConstructor, i) => {
       if (!argumentConstructor.name) {

@@ -4,23 +4,34 @@ import {Registration} from "./registration";
 class Registrator implements Registrator.DecoratorInterface {
 
 
-  private _namespaceRegistrations = new Map<string, Set<Registration>>();
+  private _classMap: Registrator.ClassNameToRegistrationMap;
+  private _providerMap: Registrator.ClassNameToRegistrationMap;
 
 
-  constructor() { }
+  constructor() {
+    this._classMap = new Map<Registrator.ClassName, Registration>();
+    this._providerMap = new Map<Registrator.ClassName, Registration>();
+  }
 
 
-  accept(registration: Registration) {
-    let ns: string = '';
-    if (registration.options && registration.options.namespace) {
-      ns = registration.options.namespace;
+  accept(reg: Registration) {
+
+    let className = reg.klass.name;
+    if (!className) {
+      throw new Error(`${reg.toString()} is not a constructor`);
     }
-    let registrationSetMaybe = this._namespaceRegistrations.get(ns);
-    if (registrationSetMaybe === undefined) {
-      registrationSetMaybe = new Set<Registration>();
-      this._namespaceRegistrations.set(ns, registrationSetMaybe);
+
+    const isClassRegistration = reg.type === Registration.Type.Class;
+    const map: Registrator.ClassNameToRegistrationMap
+      = isClassRegistration ? this._classMap : this._providerMap;
+
+    if (map.has(className)) {
+      throw new Error(
+        `${isClassRegistration ? 'Class' : 'Provider for class'} "${className}" has already been registered`
+      );
     }
-    registrationSetMaybe.add(registration);
+
+    map.set(className, reg);
   }
 
 
@@ -29,6 +40,9 @@ class Registrator implements Registrator.DecoratorInterface {
 
 export namespace Registrator {
 
+  export type ClassName = string;
+
+  export type ClassNameToRegistrationMap = Map<ClassName, Registration>;
 
   export interface DecoratorInterface {
     accept(registration: Registration): void;

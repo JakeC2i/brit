@@ -6,7 +6,7 @@ export class Registration {
 
   readonly type: Registration.Type;
   readonly klass: Class;
-  readonly dependencyNames: string[];
+  readonly dependencyNames?: string[];
   readonly options?: Registration.ClassOptions | Registration.ProviderOptions;
   readonly provider?: ProviderClass;
 
@@ -31,11 +31,11 @@ export class Registration {
     this.klass = klass;
     if (this.type === Registration.Type.Class) {
       this.options = optionsOrProvider as Registration.ClassOptions;
+      this.dependencyNames = Reflector.reflectConstructorDependencyNames(klass);
     } else {
       this.provider = optionsOrProvider as ProviderClass;
       this.options = providerOptions;
     }
-    this.dependencyNames = Reflector.reflectConstructorDependencyNames(klass);
   }
 
 
@@ -50,15 +50,11 @@ export namespace Registration {
     Provider
   }
 
-  export interface Options {
-    namespace?: string;
-  }
-
-  export interface ClassOptions extends Options {
+  export interface ClassOptions {
     async?: boolean;
   }
 
-  export interface ProviderOptions extends Options {
+  export interface ProviderOptions { }
 
-  }
+
 }
