@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import {Class} from "../class";
+import {Class} from "../type/classes";
 
 export class Reflector {
 
