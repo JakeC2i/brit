@@ -1,7 +1,14 @@
-import {getInjectorManager} from "../src/injector/injector-manager";
+import {getInjectorManager, Injectable} from "../src";
 
-console.log('WAITS development app running');
+@Injectable() class Roof {}
+@Injectable() class Walls {}
 
-const manager = getInjectorManager();
-const injector = manager.getInjector();
-const registrator = manager.getRegistrator();
+@Injectable()
+class House {
+  constructor(
+    private _roof: Roof,
+    private _walls: Walls
+  ) {}
+}
+
+const injector = getInjectorManager().getInjector();
