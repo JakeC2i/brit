@@ -1,1 +1,2 @@
-export {Injector} from './injector/injector';
+export {getInjectorManager} from './injector/injector-manager';
+export {Injectable} from "./injectable/injectable-decorator";
