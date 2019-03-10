@@ -12,3 +12,10 @@ class House {
 }
 
 const injector = getInjectorManager().getInjector();
+injector.injectFor<House>(House)
+  .then((house) => {
+    console.log(house);
+  })
+  .catch(error => {
+    console.error(error);
+  });
