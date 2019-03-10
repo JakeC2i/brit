@@ -6,7 +6,6 @@ export class Reflector {
 
   static reflectConstructorDependencyNames(constructor: Class): string[] {
     const argTypeConstructors: any[] = Reflect.getMetadata('design:paramtypes', constructor);
-    let argumentClassNames: any[] = [];
     if (!argTypeConstructors) {
       return [];
     }
