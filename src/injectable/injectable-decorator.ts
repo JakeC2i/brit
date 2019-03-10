@@ -1,13 +1,11 @@
 import {Registration} from "../injector/registration/registration";
 import {Class} from "../injector/class";
-import {getInjectorManager} from "../injector/injector-manager";
+import {getRegistrator} from "../injector/registration/registrator";
 
 export function Injectable(options?: Registration.ClassOptions) {
 
     return function _injectable(constructor: Class) {
-
-      getInjectorManager()
-        .getRegistrator()
+      getRegistrator()
         .accept(
           new Registration(
             Registration.Type.Class,
@@ -15,7 +13,6 @@ export function Injectable(options?: Registration.ClassOptions) {
             options
           )
         );
-
     }
 
 }
