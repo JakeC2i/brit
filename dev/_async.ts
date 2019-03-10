@@ -6,7 +6,7 @@ export class Roof {
     console.log('Roof constructed synchronously, but not ready yet');
     setTimeout(() => {
       console.log('Roof asynchronously marked as ready');
-      Injectable.markReady(Roof);
+      Injectable.markAsReady(Roof);
     }, 2000);
   }
 }

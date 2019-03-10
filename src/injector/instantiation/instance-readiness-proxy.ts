@@ -7,7 +7,7 @@ class InstanceReadinessProxy {
     = () => {};
 
 
-  markReady(klass: Class) {
+  markAsReady(klass: Class) {
     this._subscriptionCallback(klass.name);
   }
 

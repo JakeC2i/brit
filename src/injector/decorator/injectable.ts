@@ -19,9 +19,9 @@ export function Injectable(options?: ClassRegistration.Options) {
 
 export namespace Injectable {
 
-  export function markReady(klass: Class) {
+  export function markAsReady(klass: Class) {
     getInstanceReadinessProxy()
-      .markReady(klass);
+      .markAsReady(klass);
   }
 
 }
