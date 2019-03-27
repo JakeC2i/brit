@@ -5,9 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev-app": "ts-node ./dev/app",
-    "dev-app-watch": "nodemon",
-    "compile-ts": "tsc"
+    "build": "tsc"
   },
   "keywords": [
     "asynchronous",
@@ -18,17 +16,8 @@
   "author": "Jakub Chmielewski",
   "license": "MIT",
   "devDependencies": {
-    "nodemon": "^1.18.10",
     "ts-node": "^8.0.2",
     "typescript": "^3.3.3333"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "./src",
-      "./dev"
-    ],
-    "ext": "ts",
-    "exec": "ts-node ./dev/app"
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13"
