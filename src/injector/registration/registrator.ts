@@ -1,23 +1,24 @@
 import {ClassRegistration} from "./class";
 import {ProviderClassRegistration} from "./provider-class";
+import {Class} from "../type/classes";
 
 
 class Registrator {
 
 
-  private readonly _classMap: Registrator.ClassNameToClassRegistrationMap;
-  private readonly _providerMap: Registrator.ClassNameToProviderClassRegistrationMap;
+  private readonly _classMap: Registrator.ClassToClassRegistrationMap;
+  private readonly _providerMap: Registrator.ClassToProviderClassRegistrationMap;
 
 
   private _acceptClassRegistration(registration: ClassRegistration) {
-    const className = registration.klass.name;
+    const {klass} = registration;
     const map = this._classMap;
 
-    if (map.has(className)) {
-      throw new Error(`Class "${className}" has already been registered`);
+    if (map.has(klass)) {
+      throw new Error(`Class "${klass.name}" has already been registered`);
     }
 
-    map.set(className, registration);
+    map.set(klass, registration);
   }
 
 
@@ -34,17 +35,14 @@ class Registrator {
 
 
   constructor() {
-    this._classMap = new Map<Registrator.ClassName, ClassRegistration>();
-    this._providerMap = new Map<Registrator.ClassName, ProviderClassRegistration>();
+    this._classMap = new Map<Class, ClassRegistration>();
+    this._providerMap = new Map<Class, ProviderClassRegistration>();
   }
 
 
   accept(reg: ClassRegistration | ProviderClassRegistration) {
 
-    let className = reg.klass.name;
-    if (!className) {
-      throw new Error(`${reg.toString()} is not a constructor`);
-    }
+    let {klass} = reg;
 
     if (reg instanceof ProviderClassRegistration) {
       return this._acceptProviderClassRegistration(reg);
@@ -52,16 +50,16 @@ class Registrator {
     return this._acceptClassRegistration(reg);
   }
 
-  getClass(className: string): ClassRegistration | undefined {
-    return this._classMap.get(className);
+  getClass(klass: Class): ClassRegistration | undefined {
+    return this._classMap.get(klass);
   }
 
-  hasProvider(className: string): boolean {
-    return this._providerMap.has(className);
+  hasProvider(klass: Class): boolean {
+    return this._providerMap.has(klass);
   }
 
-  getProvider(className: string): ProviderClassRegistration | undefined {
-    return this._providerMap.get(className);
+  getProvider(klass: Class): ProviderClassRegistration | undefined {
+    return this._providerMap.get(klass);
   }
 }
 
@@ -69,9 +67,8 @@ class Registrator {
 export namespace Registrator {
 
 
-  export type ClassName = string;
-  export type ClassNameToClassRegistrationMap = Map<ClassName, ClassRegistration>;
-  export type ClassNameToProviderClassRegistrationMap = Map<ClassName, ProviderClassRegistration>;
+  export type ClassToClassRegistrationMap = Map<Class, ClassRegistration>;
+  export type ClassToProviderClassRegistrationMap = Map<Class, ProviderClassRegistration>;
 
 
 }

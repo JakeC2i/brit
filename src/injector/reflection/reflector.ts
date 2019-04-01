@@ -4,17 +4,13 @@ import {Class} from "../type/classes";
 export class Reflector {
 
 
-  static reflectConstructorDependencyNames(constructor: Class): string[] {
-    const argTypeConstructors: any[] = Reflect.getMetadata('design:paramtypes', constructor);
+  static reflectConstructorDependencyClasses(constructor: Class): Class[] {
+    const argTypeConstructors: Class[] | undefined
+      = Reflect.getMetadata('design:paramtypes', constructor);
     if (!argTypeConstructors) {
       return [];
     }
-    return argTypeConstructors.map((argumentConstructor, i) => {
-      if (!argumentConstructor.name) {
-        throw new Error(`Could not reflect "${constructor.name}" constructor argument at index ${i}`);
-      }
-      return argumentConstructor.name;
-    });
+    return argTypeConstructors;
   }
 
 

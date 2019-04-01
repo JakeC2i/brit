@@ -4,11 +4,11 @@ import {Instantiator} from "./instantiation/instantiator";
 export class Injector {
 
 
-  private _instanceMap: Instantiator.ClassNameToInstanceMap;
+  private _instanceMap: Instantiator.ClassToInstanceMap;
 
 
   constructor() {
-    this._instanceMap = new Map<string, any>();
+    this._instanceMap = new Map<Class, any>();
   }
 
 
@@ -23,6 +23,6 @@ export class Injector {
 
 
   getInstance<T>(klass: Class<T>): T | undefined {
-    return this._instanceMap.get(klass.name);
+    return this._instanceMap.get(klass);
   }
 }

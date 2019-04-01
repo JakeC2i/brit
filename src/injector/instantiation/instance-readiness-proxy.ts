@@ -8,7 +8,7 @@ class InstanceReadinessProxy {
 
 
   markAsReady(klass: Class) {
-    this._subscriptionCallback(klass.name);
+    this._subscriptionCallback(klass);
   }
 
   subscribe(readinessCallback: InstanceReadinessProxy.ReadinessCallback) {
@@ -23,7 +23,7 @@ class InstanceReadinessProxy {
 
 export namespace InstanceReadinessProxy {
 
-  export type ReadinessCallback = (className: string) => void;
+  export type ReadinessCallback = (klass: Class) => void;
 
 }
 

@@ -1,4 +1,4 @@
-import {getRegistrator, Registrator} from "../registration/registrator";
+import {getRegistrator} from "../registration/registrator";
 import {getInstanceReadinessProxy} from "./instance-readiness-proxy";
 import {Class} from "../type/classes";
 import {ProviderClassRegistration} from "../registration/provider-class";
@@ -10,19 +10,19 @@ export class Instantiator<T> {
 
   private readonly _registrator = getRegistrator();
   private readonly _readinessProxy = getInstanceReadinessProxy();
-  private readonly _order: Registrator.ClassName[] = [];
-  private readonly _instanceMap: Instantiator.ClassNameToInstanceMap;
+  private readonly _order: Class[] = [];
+  private readonly _instanceMap: Instantiator.ClassToInstanceMap;
 
 
-  private _resolveOrder(className: string) {
-    if (this._order.includes(className))
+  private _resolveOrder(klass: Class) {
+    if (this._order.includes(klass))
       return;
-    const reg = this._registrator.getClass(className);
+    const reg = this._registrator.getClass(klass);
     if (reg === undefined) {
-      throw new Error(`Class "${className}" has not been registered`);
+      throw new Error(`Class "${klass}" has not been registered`);
     }
-    (reg.dependencyNames || []).forEach(this._resolveOrder.bind(this));
-    this._order.push(className);
+    (reg.dependencyClasses || []).forEach(this._resolveOrder.bind(this));
+    this._order.push(klass);
   }
 
 
@@ -30,20 +30,20 @@ export class Instantiator<T> {
 
     const registrator = this._registrator;
 
-    const instantiate = (className: string): ColdPromise => {
+    const instantiate = (klass: Class): ColdPromise => {
       return new ColdPromise(((resolve, reject) => {
         let instance: any;
         try {
-          if (registrator.hasProvider(className)) {
-            const providerRegistration = registrator.getProvider(className) as ProviderClassRegistration;
+          if (registrator.hasProvider(klass)) {
+            const providerRegistration = registrator.getProvider(klass) as ProviderClassRegistration;
             instance = new providerRegistration.providerClass().provide();
           } else {
-            const classRegistration = registrator.getClass(className) as ClassRegistration;
+            const classRegistration = registrator.getClass(klass) as ClassRegistration;
             instance = new classRegistration.klass(
-              ...classRegistration.dependencyNames.map(name => this._instanceMap.get(name))
+              ...classRegistration.dependencyClasses.map(klass => this._instanceMap.get(klass))
             );
           }
-          this._instanceMap.set(className, instance);
+          this._instanceMap.set(klass, instance);
         } catch (err) {
           reject(err);
         }
@@ -52,20 +52,20 @@ export class Instantiator<T> {
       }));
     };
 
-    const instantiators: ColdPromise[] = this._order.map(className => {
+    const instantiators: ColdPromise[] = this._order.map(klass => {
 
-      const registration  = registrator.getClass(className);
+      const registration  = registrator.getClass(klass);
       if (registration === undefined) {
-        throw new Error(`Class "${className}" has not been registered`);
+        throw new Error(`Class "${klass}" has not been registered`);
       }
 
       if (registration.options && registration.options.async) {
         return new ColdPromise(((resolve, reject) => {
-          instantiate(className)
+          instantiate(klass)
             .fire()
             .then(instance => {
-              this._readinessProxy.subscribe((readyClassName) => {
-                if (readyClassName === className) {
+              this._readinessProxy.subscribe((readyClass) => {
+                if (readyClass === klass) {
                   resolve(instance);
                 }
               });
@@ -76,14 +76,14 @@ export class Instantiator<T> {
         }));
       }
 
-      return instantiate(className);
+      return instantiate(klass);
     });
 
     return new ColdPromise<T>((resolve, reject) => {
       ColdPromise.concat(instantiators)
         .fire()
         .then(() => {
-          resolve(this._instanceMap.get(this._root.name));
+          resolve(this._instanceMap.get(this._root));
           this._readinessProxy.unsubscribe();
         })
         .catch(reject);
@@ -94,11 +94,11 @@ export class Instantiator<T> {
   constructor(
     private _root: Class<T>
   ) {
-    this._instanceMap = new Map<string, any>();
+    this._instanceMap = new Map<Class, any>();
   }
 
   resolveOrder(): this {
-    this._resolveOrder(this._root.name);
+    this._resolveOrder(this._root);
     return this;
   }
 
@@ -106,7 +106,7 @@ export class Instantiator<T> {
     return this._instantiate();
   }
 
-  getInstanceMap(): Instantiator.ClassNameToInstanceMap {
+  getInstanceMap(): Instantiator.ClassToInstanceMap {
     return this._instanceMap;
   }
 }
@@ -114,7 +114,7 @@ export class Instantiator<T> {
 export namespace Instantiator {
 
 
-  export type ClassNameToInstanceMap = Map<string, any>;
+  export type ClassToInstanceMap = Map<Class, InstanceType<Class>>;
 
 
 }

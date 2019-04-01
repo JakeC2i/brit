@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Readme
 
 ### Changed
-- Development app classes split into multiple files.
+- All dependencies are now identified by the constructor itself instead of its' name
 
 ### Removed
 - Development project

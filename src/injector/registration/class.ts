@@ -3,13 +3,13 @@ import {Reflector} from "../reflection/reflector";
 
 export class ClassRegistration<T = any> {
 
-  readonly dependencyNames: string[];
+  readonly dependencyClasses: Class[];
 
   constructor(
     readonly klass: Class<T>,
     readonly options?: ClassRegistration.Options
   ) {
-    this.dependencyNames = Reflector.reflectConstructorDependencyNames(klass);
+    this.dependencyClasses = Reflector.reflectConstructorDependencyClasses(klass);
   }
 
 
