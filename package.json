@@ -1,7 +1,7 @@
 {
-  "name": "waits",
+  "name": "brit",
   "version": "0.3.0",
-  "description": "WAITS Asynchronous dependency Injector for TypeScript",
+  "description": "Barebone Reflective Dependency Injector for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JakeC2i/waits"
+    "url": "https://github.com/JakeC2i/brit"
   },
   "devDependencies": {
     "ts-node": "^8.0.2",

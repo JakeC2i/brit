@@ -1,6 +1,6 @@
-# WAITS - dependency injector
+# BRIT - the dependency injector
 
-WAITS stands for **W**AITS **A**synchronous Dependency **I**njector for **T**ype**S**cript.
+BRIT is **B**arebone **R**eflective Dependency **I**njector for **T**ypeScript.
 
 ### What it is
 
