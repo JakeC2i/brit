@@ -14,8 +14,15 @@
     "injector",
     "TypeScript"
   ],
-  "author": "Jakub Chmielewski",
+  "author": {
+    "name": "Jakub Chmielewski",
+    "email": "jakub.chmielewski.89@gmail.com"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JakeC2i/waits"
+  },
   "devDependencies": {
     "ts-node": "^8.0.2",
     "typescript": "^3.3.3333"

@@ -66,7 +66,7 @@ injector.injectFor<House>(House)
 
 ### Advanced usage
 
-All other features are included in `/example/all-features.ts`.Run `npm run example`.
+All other features are included in `/example/all-features.ts`. Run `npm run example`.
 
 ### TODO
 
