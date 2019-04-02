@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/brit.iml" filepath="$PROJECT_DIR$/.idea/brit.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/waits.iml" filepath="$PROJECT_DIR$/.idea/waits.iml" />
     </modules>
   </component>
