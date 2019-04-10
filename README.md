@@ -27,7 +27,7 @@ Your `tsconfig.json` must include:
 ### Installation
 
 ```
-$ npm install waits
+$ npm install brit
 ```
 
 ### Basic usage
