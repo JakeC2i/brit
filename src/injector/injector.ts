@@ -22,6 +22,16 @@ export class Injector {
   }
 
 
+  injectForSync<T>(rootClass: Class<T>): T {
+    const instantiator = new Instantiator<T>(rootClass);
+    this._instanceMap = instantiator.getInstanceMap();
+    instantiator
+      .resolveOrder()
+      .assertSynchronicity();
+    return instantiator.instantiateSync();
+  }
+
+
   getInstance<T>(klass: Class<T>): T | undefined {
     return this._instanceMap.get(klass);
   }

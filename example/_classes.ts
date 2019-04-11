@@ -1,7 +1,7 @@
-import {getInjectorManager, Injectable, InjectableProvider, Provider} from "../src";
+import {Injectable, InjectableProvider, Provider} from "../src";
 
 //
-//  Injectable
+//  Just an regular (synchronous) injectable
 //
 @Injectable()
 export class Walls {
@@ -11,7 +11,17 @@ export class Walls {
 }
 
 //
-//  Asynchronously waiting injectable
+//  Yet another regular injectable...
+//
+@Injectable()
+export class Woodwork {
+  constructor() {
+    console.log('Woodwork constructed synchronously and ready');
+  }
+}
+
+//
+//  Now it's asynchronously waiting injectable!
 //
 @Injectable({async: true})
 export class Roof {
@@ -25,7 +35,7 @@ export class Roof {
 }
 
 //
-//  Example configuration class with default values
+//  This is a example configuration class with some default values
 //
 @Injectable()
 export class DecorationInstructions {
@@ -34,7 +44,7 @@ export class DecorationInstructions {
 }
 
 //
-//  Class that provides the config class instance
+//  This is the class that provides the config class instance
 //
 @InjectableProvider(DecorationInstructions)
 export class DecoratorInstructionsProvider implements Provider<DecorationInstructions> {
@@ -47,7 +57,7 @@ export class DecoratorInstructionsProvider implements Provider<DecorationInstruc
 }
 
 //
-//  Root class
+//  Root asynchronous class
 //
 @Injectable()
 export class House {
@@ -60,12 +70,17 @@ export class House {
   }
 }
 
-// Injection
-const injector = getInjectorManager().getInjector();
-injector.injectFor<House>(House)
-  .then((house) => {
-    console.log(house);
-  })
-  .catch(error => {
-    console.error(error);
-  });
+//
+//  Root synchronous class
+//
+@Injectable()
+export class SyncHouse {
+
+  constructor(
+    private _walls: Walls,
+    private _woodwork: Woodwork
+  ) {
+    console.log('SyncHouse constructed synchronously and ready');
+  }
+
+}

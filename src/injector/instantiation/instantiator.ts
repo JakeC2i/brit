@@ -91,6 +91,32 @@ export class Instantiator<T> {
   }
 
 
+  private _instantiateSync(): T {
+
+    const registrator = this._registrator;
+
+    const instantiate = (klass: Class): any => {
+      let instance: any;
+      if (registrator.hasProvider(klass)) {
+        const providerRegistration = registrator.getProvider(klass) as ProviderClassRegistration;
+        instance = new providerRegistration.providerClass().provide();
+      } else {
+        const classRegistration = registrator.getClass(klass) as ClassRegistration;
+        instance = new classRegistration.klass(
+          ...classRegistration.dependencyClasses.map(klass => this._instanceMap.get(klass))
+        );
+      }
+      this._instanceMap.set(klass, instance);
+      return instance;
+    };
+
+    this._order.forEach(klass => {
+      instantiate(klass);
+    });
+
+    return this._instanceMap.get(this._root);
+  }
+
   constructor(
     private _root: Class<T>
   ) {
@@ -102,8 +128,24 @@ export class Instantiator<T> {
     return this;
   }
 
+  assertSynchronicity() {
+    this._order.forEach(klass => {
+      const registration = this._registrator.getClass(klass);
+      if (registration === undefined) {
+        throw new Error(`Class "${klass.name}" is not registered`);
+      }
+      if (registration.options && registration.options.async) {
+        throw new Error(`Class "${klass.name}" cannot be constructed synchronously`);
+      }
+    });
+  }
+
   instantiate(): ColdPromise<T> {
     return this._instantiate();
+  }
+
+  instantiateSync(): T {
+    return this._instantiateSync();
   }
 
   getInstanceMap(): Instantiator.ClassToInstanceMap {

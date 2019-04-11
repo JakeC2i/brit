@@ -1,11 +1,12 @@
 {
   "name": "brit",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Barebone Reflective Dependency Injector for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "example": "ts-node ./example/all-features.ts",
+    "async-example": "ts-node example/async.ts",
+    "sync-example": "ts-node example/sync.ts",
     "build": "tsc"
   },
   "keywords": [

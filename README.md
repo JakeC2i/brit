@@ -66,7 +66,11 @@ injector.injectFor<House>(House)
 
 ### Advanced usage
 
-All other features are included in `/example/all-features.ts`. Run `npm run example`.
+All other features are shown in the `/example` directory.
+Inspect the `/example/_classes.ts` and learn!
+
+* Asynchronous (regular) usage - run `npm run async-example`;
+* Synchronous usage - run `npm run sync-example`
 
 ### TODO
 
@@ -74,7 +78,6 @@ All other features are included in `/example/all-features.ts`. Run `npm run exam
 * Test browser compatibility
 * Multiple injectors, remove singleton requirement
 * Constructor arguments for the injectable provider
-* Sync instantiation when all dependencies are sync
 * Cyclic dependency detection
 
 ### License
