@@ -36,7 +36,10 @@ export class Instantiator<T> {
         try {
           if (registrator.hasProvider(klass)) {
             const providerRegistration = registrator.getProvider(klass) as ProviderClassRegistration;
-            instance = new providerRegistration.providerClass().provide();
+            const classRegistration = registrator.getClass(klass) as ClassRegistration;
+            instance = new providerRegistration.providerClass().provide(
+              ...classRegistration.dependencyClasses.map(klass => this._instanceMap.get(klass))
+            );
           } else {
             const classRegistration = registrator.getClass(klass) as ClassRegistration;
             instance = new classRegistration.klass(

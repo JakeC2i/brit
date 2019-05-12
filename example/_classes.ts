@@ -35,21 +35,26 @@ export class Roof {
 }
 
 //
-//  This is a example configuration class with some default values
+//  This is a example configuration class with some default values and dependencies
 //
 @Injectable()
 export class DecorationInstructions {
+  constructor(
+    private _roof: Roof,
+    private _walls: Walls
+  ) {}
   roofColor: string = 'red';
   wallsColor: string = 'white';
 }
 
 //
 //  This is the class that provides the config class instance
+//  Arguments of the `provide` method are constructor arguments of the provided class
 //
 @InjectableProvider(DecorationInstructions)
 export class DecoratorInstructionsProvider implements Provider<DecorationInstructions> {
-  provide(): DecorationInstructions {
-    const instructions = new DecorationInstructions();
+  provide(roof: Roof, walls: Walls): DecorationInstructions {
+    const instructions = new DecorationInstructions(roof, walls);
     instructions.roofColor = 'blue';
     instructions.wallsColor = 'yellow';
     return instructions;
