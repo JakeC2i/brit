@@ -1,9 +1,10 @@
 import {getRegistrator} from "../registration/registrator";
 import {getInstanceReadinessProxy} from "./instance-readiness-proxy";
-import {Class} from "../type/classes";
+import {Class} from "../..";
 import {ProviderClassRegistration} from "../registration/provider-class";
 import {ClassRegistration} from "../registration/class";
 import {ColdPromise} from "../../async/cold-promise";
+import {arrayIncludes} from "../../util/array-includes";
 
 export class Instantiator<T> {
 
@@ -15,7 +16,7 @@ export class Instantiator<T> {
 
 
   private _resolveOrder(klass: Class) {
-    if (this._order.includes(klass))
+    if (arrayIncludes<Class>(this._order, klass))
       return;
     const reg = this._registrator.getClass(klass);
     if (reg === undefined) {
