@@ -4,7 +4,7 @@ BRIT is **B**arebone **R**eflective Dependency **I**njector for **T**ypeScript.
 
 ### What it is
 
-It's a simple, Angular-like, reflection-based dependency injector for NodeJS.
+It's a simple, Angular-like, reflection-based dependency injector for NodeJS and Browser.
 
 ### What it can do
 
@@ -75,7 +75,6 @@ Inspect the `/example/_classes.ts` and learn!
 ### TODO
 
 * Tests
-* Test browser compatibility
 * Multiple injectors, remove singleton requirement
 * Constructor arguments for the injectable provider
 * Cyclic dependency detection
