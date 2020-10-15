@@ -1,6 +1,6 @@
 {
   "name": "brit",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Barebone Reflective Dependency Injector for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

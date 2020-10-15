@@ -49,11 +49,17 @@ export class DecorationInstructions {
 
 //
 //  This is the class that provides the config class instance
-//  Arguments of the `provide` method are constructor arguments of the provided class
+//  Arguments of the `provide` method are:
+//    - when `resolve` fields is not set - constructor arguments of the provided class
+//    - when  resolve` field is set - resolved dependencies defined in the parameter
 //
 @InjectableProvider(DecorationInstructions)
 export class DecoratorInstructionsProvider implements Provider<DecorationInstructions> {
-  provide(roof: Roof, walls: Walls): DecorationInstructions {
+
+  // This would have exact same effect as now, but you can resolve other classes too!
+  // resolve = [Roof, Walls];
+
+  provide(roof: Walls, walls: Roof): DecorationInstructions {
     const instructions = new DecorationInstructions(roof, walls);
     instructions.roofColor = 'blue';
     instructions.wallsColor = 'yellow';

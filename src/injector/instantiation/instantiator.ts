@@ -22,7 +22,14 @@ export class Instantiator<T> {
     if (reg === undefined) {
       throw new Error(`Class "${klass}" has not been registered`);
     }
-    (reg.dependencyClasses || []).forEach(this._resolveOrder.bind(this));
+    let dependencyClasses: Class[] = reg.dependencyClasses || [];
+    if (this._registrator.hasProvider(klass)) {
+      const providerClass = new (this._registrator.getProvider(klass) as ProviderClassRegistration).providerClass();
+      if (providerClass.resolve) {
+        dependencyClasses = providerClass.resolve;
+      }
+    }
+    dependencyClasses.forEach(this._resolveOrder.bind(this));
     this._order.push(klass);
   }
 
@@ -38,9 +45,11 @@ export class Instantiator<T> {
           if (registrator.hasProvider(klass)) {
             const providerRegistration = registrator.getProvider(klass) as ProviderClassRegistration;
             const classRegistration = registrator.getClass(klass) as ClassRegistration;
-            instance = new providerRegistration.providerClass().provide(
-              ...classRegistration.dependencyClasses.map(klass => this._instanceMap.get(klass))
-            );
+            const providerClass = new providerRegistration.providerClass();
+            const classDependencies = providerClass.resolve ?
+                providerClass.resolve.map(klass => this._instanceMap.get(klass)) :
+                classRegistration.dependencyClasses.map(klass => this._instanceMap.get(klass));
+            instance = providerClass.provide(...classDependencies);
           } else {
             const classRegistration = registrator.getClass(klass) as ClassRegistration;
             instance = new classRegistration.klass(
